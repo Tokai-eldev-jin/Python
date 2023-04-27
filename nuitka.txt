@@ -1,1 +1,0 @@
-nuitka --windows-disable-console --standalone --onefile --enable-plugin=tk-inter  test1.py
