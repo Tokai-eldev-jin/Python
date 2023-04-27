@@ -1,0 +1,322 @@
+<html>
+<head>
+<title>情報機器持出返却管理表</title>
+
+
+<script language="JavaScript">
+<!--
+function eventA(num)
+{
+	document.getElementById('event').innerText=num
+}
+
+-->
+</script>
+
+<style type='text/css'>
+<!--
+
+	div#div0
+	{
+		position:absolute;
+		left:10;
+		top:10;
+		/*width:300;
+		border-style:solid;
+		border-width:1px;
+		border-color:black;
+		border-collapse: collapse;
+		font-size:12;
+		padding:0;
+		*/
+		color:black;
+	}
+
+	div#div1
+	{
+		position:absolute;
+		left:10;
+		top:30;
+		/*width:300;
+		border-style:solid;
+		border-width:1px;
+		border-color:black;
+		border-collapse: collapse;
+		font-size:12;
+		padding:0;
+		*/
+		color:black;
+	}
+
+
+	div#div2
+	{
+		position:absolute;
+		left:500;
+		top:30;
+		/*width:300;
+		border-style:solid;
+		border-width:1px;
+		border-color:black;
+		border-collapse: collapse;
+		font-size:12;
+		padding:0;
+		*/
+		color:black;
+	}
+
+	div#div3
+	{
+		position:absolute;
+		left:130;
+		top:530;
+		/*width:300;
+		border-style:solid;
+		border-width:1px;
+		border-color:black;
+		border-collapse: collapse;
+		font-size:12;
+		padding:0;
+		*/
+		color:black;
+	}
+
+
+	div#div4
+	{
+		position:absolute;
+		left:650;
+		top:250;
+		/*width:300;
+		border-style:solid;
+		border-width:1px;
+		border-color:black;
+		border-collapse: collapse;
+		font-size:12;
+		padding:0;
+		*/
+		color:black;
+	}
+
+
+	div#div5
+	{
+		position:absolute;
+		left:1000;
+		top:55;
+		/*width:300;
+		border-style:solid;
+		border-width:1px;
+		border-color:black;
+		border-collapse: collapse;
+		font-size:12;
+		padding:0;
+		*/
+		color:black;
+	}
+
+	
+	
+	
+	
+	hr#hr1
+	{
+		position:absolute;
+		top:160px;
+		width:100%;
+		border-top: 2px solid skyblue;
+	}
+
+	hr#hr2
+	{
+		position:absolute;
+		top:205px;
+		width:100%;
+		border-top: 2px solid skyblue;
+	}
+	
+	span#event
+	{
+		position:absolute;
+		left:210;
+		top:150;
+	}
+
+
+	
+	
+	table
+	{
+		/*position:absolute;
+		left:350;
+		top:60;
+		width:200;
+		*/
+		border-style:solid;
+		border-width:1px;
+		border-color:black;
+		border-collapse: collapse;
+		font-size:12;
+		Text-Align:left;
+		padding:0;
+	}
+
+	th
+	{
+	    border-style:solid;
+	    border-width:1px;
+	    border-color:black;
+	    padding:0;
+	    background-color:#ffff66;
+	    text-align:center;
+	    height:20;
+	}
+	
+	td
+	{
+	    border-style:solid;
+	    border-width:1px;
+	    border-color:black;
+	    padding:0;
+	    background-color:#DDFFFF;
+	    text-align:left;
+	    height:12;
+	}
+
+
+	
+	
+-->
+</style>
+
+
+</head>
+<body style="width:100%;">
+<div id='div0'><strong id='Fileid'><strong></div>
+
+<div id='div1'>
+	<table id='table_1'>
+	<caption style='font-size:16;'><strong>持ち出し前</strong></caption>
+	<th style='width:150;height:30;text-align:center;'</th>項目<th style='width:320;'>入力</th>
+	<tr>
+		<td style='height:30;text-align:center;'>　持出日　</td>
+		<td style='height:30;text-align:center;' id='Mochidashi_bi'><input type='date' id='date1' name='持出日' value='' /></td>
+	</tr>
+	<tr>
+		<td style='height:30;text-align:center;'>　持出時刻　</td>
+		<td style='height:30;text-align:center;' id='Mochidashi_jikoku'><input type='time' id='time1' name='持出時刻' value=''></td>
+	</tr>
+	<tr>
+		<td style='height:30;text-align:center;'>　持出者　</td>
+		<td style='height:30;text-align:center;' id='mochidashi_sya'></td>
+	</tr>	
+	<tr>
+		<td style='height:30;text-align:center;'>　持出機器　</td>
+		<td id='mochidashi_kiki' style='height:30;text-align:center;'></td>
+	</tr>
+	<tr>
+		<td style='height:30;text-align:center;' rowspan='2'>カメラ<br>ビデオ</td>
+		<td id='satuei_butu' style='height:30;text-align:center;'>　撮影物（任意）　<input type='text' id='satuei_butu_box'></td>
+	</tr>
+	<tr>
+		<td id='satuei_basho' style='height:30;text-align:center;'>　撮影場所（任意）　<input type='text' id='satuei_basho_box'></td>
+	</tr>
+	<tr>
+		<td style='height:30;text-align:center;' rowspan='3'>　使用目的　</td>
+		<td style='height:30;text-align:left;'>
+			<input type='radio' name='Siyou_radio' id='syanai' onclick='eventA(this.id)'>社内　<br>
+			　　<input type='checkbox' id='kaigi' style='font-size:8;'>会議資料　
+			<input type='checkbox' id='hokan' style='font-size:8;'>保管用　
+			<input type='checkbox' id='data_move' style='font-size:8;'>データ移動
+		</td>
+	</tr>
+	<tr>
+		<td style='height:30;text-align:left;'>
+			<input type='radio' name='Siyou_radio' id='shagai' style='font-size:8;' onclick='eventA(this.id)'>社外　<br>
+			　　<input type='checkbox' id='kyakusaki' style='font-size:8;'>客先　
+			<input type='checkbox' id='siiresaki' style='font-size:8;'>仕入先　
+			<input type='checkbox' id='sonota0' style='font-size:8;'>その他　
+			<input type='text' id='in_sonota1' size='10' style='font-size:8;'>
+		</td>
+	</tr>
+	<tr>
+		<td style='height:30;text-align:left;'>
+			<input type='radio' name='Siyou_radio' id='sonota' style='font-size:8;' onclick='eventA(this.id)'>その他
+			　<input type='text' id='sonota1' size='8' style='font-size:8;'>
+		</td>
+	</tr>
+	<tr>
+		<td style='height:30;text-align:center;'>　返却予定日　</td>
+		<td id='henkyaku_yoteibi' style='height:30;text-align:center;'><input type='date' id='date2' name='今日の日付' value='' /></td>
+	</tr>
+	<tr>
+		<td style='height:30;text-align:center;'>　返却予定時間　</td>
+		<td id='henkyaku_yoteijikan' style='height:30;text-align:center;'><input type='time' id='time2' name='返却時刻' value=''></td>
+	</tr>
+	<tr>
+		<td style='height:30;text-align:center;'>ウィルスチェック</td>
+		<td style='height:30;text-align:center;'><input type='checkbox' id='virus Check_box'>ウィルスチェック済</td>
+	</tr>
+	<tr>
+		<td style='height:30;text-align:center;'>確認者</td>
+		<td id='Kakuninnsya' style='height:30;text-align:center;'>　</td>
+	</tr>
+	</table>
+</div>
+
+
+
+<div id='div2'>
+	<table id='table_1'>
+	<caption style='font-size:16;'><strong>持ち出し後</strong></caption>
+	<th style='width:150;height:30;'</th>項目<th style='width:300;'>入力</th>
+	<tr>
+		<td style='height:30;text-align:center;'>　返却日　</td>
+		<td id='henkyaku_bi' style='height:30;text-align:center;'><input type='date' id='date3' name='返却日' value='' /></td>
+	</tr>
+	<tr>
+		<td style='height:30;text-align:center;'>　返却時間　</td>
+		<td id='henkyaku_jikan' style='height:30;text-align:center;'><input type='time' id='time3' name='返却時刻' value=''></td>
+	</tr>
+	<tr>
+		<td style='height:30;text-align:center;'>ウィルスチェック</td>
+		<td style='height:30;text-align:center;'><input type='checkbox' id='virus Check_box2'>ウィルスチェック済</td>
+	</tr>
+	<tr>
+		<td style='height:30;text-align:center;'>データ削除</td>
+		<td style='height:30;text-align:center;'><input type='checkbox' id='Data Check_box'>データ削除済</td>
+	</tr>
+	<tr>
+		<td style='height:30;text-align:center;'>確認者</td>
+		<td id='Kakuninnsya2' style='height:30;text-align:center;'>　</td>
+	</tr>
+	</table>
+</div>
+
+
+<div id='div3'>
+	<button type='button' name='button8' id='Chuushi' onclick='eventA(this.id)'>中止</button>　　
+	<button type='button' name='button1' id='Soushin1' onclick='eventA(this.id)'>実行</button>　　
+	<button type='button' name='button2' id='Shounin1' onclick='eventA(this.id)'>承認</button>　　
+	<input type='button' name='button6' id='Sashimodoshi1' value='差戻' onclick='eventA(this.id)'>
+</div>
+
+
+<div id='div4'>
+	<button type='button' name='button3' id='Soushin2' onclick='eventA(this.id)'>実行</button>　　
+	<button type='button' name='button4' id='Shounin2' onclick='eventA(this.id)'>承認</button>　　
+	<input type='button' name='button7' id='Sashimodoshi2' value='差戻' onclick='eventA(this.id)'>
+</div>
+
+
+<div id='div5'>
+	<button type='button' name='button5' id='syuuryou' onclick='eventA(this.id)'>終了</button>　　　　
+</div>
+
+
+
+<span id='event' style='display:none;'></span>
+<span id='rireki' style='display:none;'></span>
+
+</body>
+</html>
