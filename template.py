@@ -3,6 +3,14 @@ import jin as j
 import global_value as g
 
 
+
+def AAA():
+    hnd=j.getid("all_win")
+    for i in hnd:
+        print(i)
+
+
+
 def main():
 
 
@@ -25,50 +33,35 @@ def main():
     #print(sys.argv[0])#起動パラメータ
 
 
-    #web
-    #必要なライブラリをインポート
     from selenium import webdriver
-    from selenium.webdriver.edge.service import Service
     from selenium.webdriver.common.by import By
-
-
-
-    options = webdriver.EdgeOptions()
-    options.add_experimental_option("excludeSwitches", ['enable-automation'])
+    from selenium.webdriver.edge.service import Service
 
     profile_path = j.path_join(r"C:\Users",j.getuser(),r"Local\Microsoft\Edge\User Data\Profile 1")
+    options = webdriver.EdgeOptions()
+    options.add_experimental_option("excludeSwitches", ['enable-automation'])
     options.use_chromium = True
     options.add_argument('disable-web-security')
     options.add_argument("--user-data-dir="+ profile_path)
     options.add_argument('--lang=ja')
     ##options.add_argument('--headless')
     options.add_argument("--no-sandbox")
+    service = Service(options=options)
+
+    profile_path2 = j.path_join(r"C:\Users",j.getuser(),r"Local\Microsoft\Edge\User Data\Profile 2")
+    options2 = webdriver.EdgeOptions()
+    options2.add_experimental_option("excludeSwitches", ['enable-automation'])
+    options2.use_chromium = True
+    options2.add_argument('disable-web-security')
+    options2.add_argument("--user-data-dir="+ profile_path2)
+    options2.add_argument('--lang=ja')
+    ##options.add_argument('--headless')
+    options2.add_argument("--no-sandbox")
+    service2 = Service(options=options2)
 
 
-    if j.File_system("fs_exists",j.path_join(r"C:\Users",j.getuser(),
-                                r"AppData\Local\SeleniumBasic\edgedriver.exe")) == True:
-        g.edgeDriver = j.path_join(r"C:\Users",j.getuser(),r"AppData\Local\SeleniumBasic\edgedriver.exe")
-    else:
-        g.edgeDriver = r"C:\Program Files\SeleniumBasic\edgedriver.exe"
-
-    service = Service(executable_path=g.edgeDriver,options=options)
-
-
-
-    ##fukidasiやIE_msg用chromeの立ち上げ
-##    fuki_id=0
-##    g.driver0 = webdriver.Edge(service=service, options=options)
-
-    ####################Edge立ち上げ####################
-##    driver = webdriver.Edge(service=service, options=options)
-##    driver.set_page_load_timeout(5)
-##    driver.maximize_window()
-##
-##    driver.get("https://p3.phoneappli.net/front/home")
-##    j.BusyWait(driver)
-##    j.sleep(10)
-    ####################Edge立ち上げ####################
-
+    g.driver0 = webdriver.Edge(service=service,options=options)
+    driver = webdriver.Edge(service=service2,options=options2)
 
     '''
     #ACCESS
@@ -84,10 +77,9 @@ def main():
 
 
 
-
-
-
+    driver.get("https://p3.phoneappli.net/front/home")
     j.IE_msg("hohohohO")
+    g.driver0.quit()
 
 
 
