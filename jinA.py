@@ -858,7 +858,7 @@ def get_slider(hwnd,k_class,num=1):
 def clkmenu(hwnd,menu_pos=""):
     '''
     メニューをクリックする
-    clikmenu(hwnd,"4_3")
+    clkmenu(hwnd,"4_3")
 
     hwnd        :親ウィンドウハンドル
     menu_pos    :クリックするメニューの場所
@@ -1200,11 +1200,13 @@ def hash_sort(hashtable,kind=""):
 
 
 
+
 def Is_file_open(filepath: str) -> bool:
     ''''
     ファイルが開いているかを調べる
     filepath                    :ファイルのパス
     '''
+        
     try:
         with open(filepath, 'a'):
             return False
@@ -1213,11 +1215,9 @@ def Is_file_open(filepath: str) -> bool:
     
 
 
-
-
 def fopen(file,kind,kind2=0):
     '''
-    f1={}
+    f1=[]
     f1=fopen(path,"f_read_or_f_write")
 
     file            :ファイルのパス
@@ -1230,7 +1230,7 @@ def fopen(file,kind,kind2=0):
                     :2   cp932
     '''
 
-    fdata={}
+    fdata=[]
 
     if kind=="f_exists":
         if os.path.exists(file) == False:
@@ -1239,10 +1239,7 @@ def fopen(file,kind,kind2=0):
             return True
     if kind=="f_read" or kind=="f_read_or_f_write":
         if os.path.exists(file) == False:
-            fdata["0_0"]=file
-            fdata["0_1"]=0
-            fdata["0_2"]=0
-            fdata["0_3"]=""
+            fdata.append([file,0,0,""])
             return fdata
         else:
             if kind2 == 0:
@@ -1255,16 +1252,22 @@ def fopen(file,kind,kind2=0):
             gyou=1
             max_retu=1
 
+
+            fdata.append([])
+
             for line in f:
                 line = line.strip() #前後空白削除
                 line = line.replace('\n','') #末尾の\nの削除
                 line = line.split(",") #分割
 
-                retu=1
-                for col in range(0,len(line)):
-                    getdata=line[col]
+                fdata.append([])
 
-                    fdata[str(gyou)+"_"+str(retu)]=getdata
+                retu=1
+                fdata[gyou].append("")
+                for col in range(0,len(line)):
+                    getdata=str(line[col])
+
+                    fdata[gyou].append(getdata)
                     retu=retu+1
 
                 gyou=gyou+1
@@ -1272,67 +1275,67 @@ def fopen(file,kind,kind2=0):
                     max_retu=(retu-1)
 
             f.close()
-            fdata["0_0"]=file
-            fdata["0_1"]=(gyou-1)
-            fdata["0_2"]=max_retu
+
             if kind=="f_read":
-                fdata["0_3"]="read_only"
+                fdata[0]=[file,(gyou-1),max_retu,"read_only"]
             else:
-                fdata["0_3"]=""
+                fdata[0]=[file,(gyou-1),max_retu,""]
 
             return fdata
     if kind=="f_write":
-        fdata["0_0"]=file
-        fdata["0_1"]=0
-        fdata["0_2"]=0
-        fdata["0_3"]=""
+        fdata.append([file,0,0,""])
         return fdata
 
-def fget(fdata,gyou,retu=1):
+
+
+def fget(fdata,gyou,retu=""):
     '''
     fget(f1,1,1)
 
     fdata           :fopenで開いたファイル配列
     gyou            :ファイルの行
+                    :-1     行数
+                    :-2     全データ
     retu            :ファイルの列
     '''
 
     if gyou==-1:
-        return fdata["0_1"]
+        return len(fdata)-1
 
     elif gyou==-2:
+        cyc=0
+        all_f_str=""
+        for i in range(1,len(fdata)):
+            getdata=fdata[i]
 
-        row=fdata["0_1"]
-        col=fdata["0_2"]
-
-        f_str=""
-        for i in range(1,row+1):
-            for ii in range(1,col+1):
-                if ii==1:
-                    try:
-                        f_str=f_str+fdata[str(i)+"_"+str(ii)]
-                    except KeyError:
-                        fdata[str(i)+"_"+str(ii)]=""
-                        f_str=f_str+fdata[str(i)+"_"+str(ii)]
-                else:
-                    try:
-                        f_str=f_str+','+fdata[str(i)+"_"+str(ii)]
-                    except KeyError:
-                        fdata[str(i)+"_"+str(ii)]=""
-                        f_str=f_str+fdata[str(i)+"_"+str(ii)]
-            if i==row:
-                f_str=f_str
+            if len(getdata)>=2:
+                f_str=getdata[1]
+                for ii in range(2,len(getdata)):
+                    f_str=f_str+","+getdata[ii]
             else:
-                f_str=f_str+'\n'
+                f_str=","
 
-        return f_str
+            if all_f_str=="":
+                all_f_str=f_str
+            else:
+                all_f_str=all_f_str+"\n"+f_str
+        return all_f_str
+
     else:
-        try:
-            getdata=fdata[str(gyou)+"_"+str(retu)]
-        except:
-            fdata[str(gyou)+"_"+str(retu)]=""
-
-        return fdata[str(gyou)+"_"+str(retu)]
+        if retu=="":
+            getdata=fdata[gyou]
+            if len(getdata)>=2:
+                f_str=getdata[1]
+                for ii in range(2,len(getdata)):
+                    f_str=f_str+","+getdata[ii]
+            else:
+                f_str=""
+            return f_str
+        else:
+            try:
+                return str(fdata[gyou][retu])
+            except:
+                return None
 
 
 def fput(fdata,atai,gyou=0,retu=0):
@@ -1344,48 +1347,44 @@ def fput(fdata,atai,gyou=0,retu=0):
     gyou            :ファイルの行
     retu            :ファイルの列
     '''
+    import copy
 
-    if fdata["0_3"]=="read_only":
+    if fdata[0][3]=="read_only":
         msg("読み取り専用です",0)
+
     elif gyou != 0 and retu != 0:
-        fdata[str(gyou)+"_"+str(retu)]=atai
+        for i in range(len(fdata),gyou+1):
+            fdata.append(["None"])
 
-        e_gyou=fdata["0_1"]
-        e_retu=fdata["0_2"]
+        if retu > (len(fdata[gyou])-1):
+            for i in range(len(fdata[gyou]),(retu+1)):
+                if i !=retu:
+                    fdata[gyou].append("")
+                else:
+                    fdata[gyou].append(str(atai))
+        else:
+            fdata[gyou][retu]=str(atai)
+    elif gyou==0 and retu==0:
+        data=fdata[0]
+        fdata=[]
+        fdata.append(data)
 
-        if e_gyou<gyou:
-            e_gyou=gyou
-            fdata["0_1"]=e_gyou
+        gyou_table=atai.split("\n")
+        cyc=0
+        for retu_str in gyou_table:
+            retu_table=retu_str.split(",")
+            retu_table.insert(0,"")
+            fdata.append(retu_table)
 
-        if e_retu<retu:
-            e_retu=retu
-            fdata["0_2"]=e_retu
+    elif retu==0:
+        for i in range(len(fdata),gyou+1):
+            fdata.append([""])
+        getdata=atai.split(",")
+        getdata.insert(0,"")
+        fdata[gyou]=copy.deepcopy(getdata)
 
-    else:
-        gyou=1
-        max_retu=1
+    return fdata
 
-
-        atai = atai.strip() #前後空白削除
-        row_str = atai.split('\n') #分割
-
-        gyou=1
-        max_retu=1
-
-        for i in range(0,len(row_str)):
-            retu=1
-            col_str=row_str[i].split(',')
-
-            for ii in range(0,len(col_str)):
-                fdata[str(gyou)+"_"+str(retu)]=col_str[ii]
-                retu=retu+1
-
-            gyou=gyou+1
-            if max_retu < (retu-1):
-                max_retu=(retu-1)
-
-        fdata["0_1"]=(gyou-1)
-        fdata["0_2"]=max_retu
 
 
 def fclose(fdata,kind2=0):
@@ -1397,32 +1396,27 @@ def fclose(fdata,kind2=0):
                     :1      SHIFT-JIS
                     :2      cp932
     '''
-    if fdata["0_3"]=="read_only":
+    if fdata[0][3]=="read_only":
         pass
     else:
-        path=fdata["0_0"]
+        path=fdata[0][0]
 
-        row=fdata["0_1"]
-        col=fdata["0_2"]
+        all_f_str=""
+        for i in range(1,len(fdata)):
+            getdata=fdata[i]
 
+            if len(getdata)>=2:
+                f_str=getdata[1]
+                for ii in range(2,len(getdata)):
+                    f_str=f_str+","+getdata[ii]
+            else:
+                f_str=","
 
-        f_str=""
-        for i in range(1,row+1):
-            for ii in range(1,col+1):
-                if ii==1:
-                    try:
-                        f_str=f_str+str(fdata[str(i)+"_"+str(ii)])
-                    except KeyError:
-                        fdata[str(i)+"_"+str(ii)]=""
-                        f_str=f_str+str(fdata[str(i)+"_"+str(ii)])
-                else:
-                    try:
-                        f_str=f_str+','+str(fdata[str(i)+"_"+str(ii)])
-                    except KeyError:
-                        fdata[str(i)+"_"+str(ii)]=""
-                        f_str=f_str+','+str(fdata[str(i)+"_"+str(ii)])
+            if all_f_str=="":
+                all_f_str=f_str
+            else:
+                all_f_str=all_f_str+"\n"+f_str
 
-            f_str=f_str+'\n'
 
         if kind2 == 0:
             f = open(path, 'w', encoding='UTF-8')
@@ -1431,7 +1425,7 @@ def fclose(fdata,kind2=0):
         elif kind2==2:
             f = open(path, 'w', encoding='cp932')
 
-        f.writelines(f_str)
+        f.writelines(all_f_str)
         f.close()
 
 
@@ -1441,34 +1435,9 @@ def fdelline(fdata,gyou):
     gyou            :削除する行
     '''
 
-    path=fdata["0_0"]
-    row=fdata["0_1"]
-    col=fdata["0_2"]
+    del fdata[gyou]
+    return fdata
 
-    fdata2 = {}
-
-    t=1
-    for i in range(1,row+1):
-        if gyou == i:
-            continue
-        for ii in range(1,col+1):
-                fdata2[str(t)+"_"+str(ii)]=fdata[str(i)+"_"+str(ii)]
-
-        t=t+1
-
-    fdata.clear()
-
-    fdata["0_0"]=path
-    fdata["0_1"]=(t-1)
-    fdata["0_2"]=col
-
-    for i in range(1,t):
-        for ii in range(1,col+1):
-            try:
-                fdata[str(i)+"_"+str(ii)]=fdata2[str(i)+"_"+str(ii)]
-            except KeyError:
-                fdata[str(i)+"_"+str(ii)]=""
-                fdata[str(i)+"_"+str(ii)]=fdata2[str(i)+"_"+str(ii)]
 
 
 def get_gamen_size():
@@ -3439,14 +3408,12 @@ def Py_Table(rows,toprow,title="table",message="クリックで選択",sizeX=500
     sizeY               :画面のYサイズ
     return              :行,列,値
 
-
     メモ
     sg.Textをリンクとして使う方法
     sg.Text(item,font=('メイリオ',10,"bold"),key='-LinkA-',text_color=color_table[4],enable_events=True)
     
     LinkpathB=window['-LinkA-'].DisplayText
     j.exec_apli(LinkpathB)
-    
     '''
 
     import PySimpleGUI as sg
@@ -3667,7 +3634,7 @@ def exec_apli(app):
     j.exec_apli(r"\\tr\dfs\ELデバイス部\07_室課\03_プロ開室\神川\情報機器持出返却管理表\Temp.html")
     '''
     import os
-    
+
     app=replace(app,"/",os.sep)
     os.startfile(app, operation='open')
 
